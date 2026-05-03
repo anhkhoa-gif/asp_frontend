@@ -1,21 +1,12 @@
+// 'use client';
 'use client';
-import { API_URL } from '@/lib/api';
 
+import { API_URL } from '@/lib/api';
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { 
-  Filter, 
-  Grid, 
-  List, 
-  Plus,
-  Search,
-  BookOpen,
-  Trash2,
-  Edit3,
-  ArrowLeft
-} from 'lucide-react';
+import { Filter, Grid, List, Plus, Search, BookOpen, Trash2, Edit3 } from 'lucide-react';
 import Link from 'next/link';
-import { BookCard, BookStatus } from '@/components/BookCard';
+import { BookCard } from '@/components/BookCard';
 import { BookModal } from '@/components/BookModal';
 
 interface Book {
@@ -24,7 +15,8 @@ interface Book {
   author: string;
   quantity: number;
   category: string;
-  status: BookStatus;
+  status: number; // can be mapped to BookStatus enum if needed
+  imageUrl?: string;
 }
 
 export default function BooksPage() {
@@ -38,13 +30,13 @@ export default function BooksPage() {
 
   const fetchBooks = () => {
     setLoading(true);
-    fetch('${API_URL}/api/Books')
-      .then(res => res.json())
-      .then(data => {
+    fetch(`${API_URL}/api/Books`)
+      .then((res) => res.json())
+      .then((data) => {
         setBooks(data);
         setLoading(false);
       })
-      .catch(err => {
+      .catch((err) => {
         console.error('Error fetching books:', err);
         setLoading(false);
       });
@@ -56,17 +48,16 @@ export default function BooksPage() {
       window.location.replace('/login');
       return;
     }
-
     try {
       const user = JSON.parse(userStr);
       const roles = user.userRoles || user.UserRoles || [];
-      const isAdmin = roles.some((ur: any) => (ur?.role?.roleName || ur?.Role?.RoleName)?.toLowerCase() === 'admin');
-      
+      const isAdmin = roles.some(
+        (ur: any) => (ur?.role?.roleName || ur?.Role?.RoleName)?.toLowerCase() === 'admin'
+      );
       if (!isAdmin) {
         window.location.replace('/');
         return;
       }
-      
       setIsAuthorized(true);
       fetchBooks();
     } catch {
@@ -75,18 +66,14 @@ export default function BooksPage() {
   }, []);
 
   const handleSaveBook = async (bookData: any) => {
-    const url = bookData.id 
-      ? `${API_URL}/api/Books/${bookData.id}` 
-      : '${API_URL}/api/Books';
+    const url = bookData.id ? `${API_URL}/api/Books/${bookData.id}` : `${API_URL}/api/Books`;
     const method = bookData.id ? 'PUT' : 'POST';
-
     try {
       const response = await fetch(url, {
         method,
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(bookData)
       });
-
       if (response.ok) {
         setIsModalOpen(false);
         fetchBooks();
@@ -98,12 +85,8 @@ export default function BooksPage() {
 
   const handleDeleteBook = async (id: number) => {
     if (!confirm('Bạn có chắc chắn muốn xóa cuốn sách này không?')) return;
-
     try {
-      const response = await fetch(`${API_URL}/api/Books/${id}`, {
-        method: 'DELETE'
-      });
-
+      const response = await fetch(`${API_URL}/api/Books/${id}`, { method: 'DELETE' });
       if (response.ok) {
         fetchBooks();
       }
@@ -112,15 +95,16 @@ export default function BooksPage() {
     }
   };
 
-  const filteredBooks = books.filter(book => 
-    book.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    book.author.toLowerCase().includes(searchQuery.toLowerCase())
+  const filteredBooks = books.filter(
+    (book) =>
+      book.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      book.author.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
   if (!isAuthorized) {
     return (
       <div className="flex flex-col items-center justify-center min-h-[60vh] space-y-4">
-        <div className="w-12 h-12 border-4 border-primary border-t-transparent rounded-full animate-spin"></div>
+        <div className="w-12 h-12 border-4 border-primary border-t-transparent rounded-full animate-spin" />
         <p className="text-sm font-bold text-navy animate-pulse">Đang kiểm tra quyền truy cập...</p>
       </div>
     );
@@ -129,35 +113,20 @@ export default function BooksPage() {
   return (
     <div className="p-8 space-y-8 max-w-[1600px] mx-auto">
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
-        <div className="flex items-center gap-4">
-          <div>
-            <h2 className="text-3xl font-black text-navy tracking-tight">Kho sách của bạn</h2>
-            <p className="text-sm text-muted font-medium mt-1">Quản lý kho và cập nhật thông tin các tựa sách thuê.</p>
-          </div>
+        <div>
+          <h2 className="text-3xl font-black text-navy tracking-tight">Kho sách của bạn</h2>
+          <p className="text-sm text-muted font-medium mt-1">Quản lý kho và cập nhật thông tin các tựa sách thuê.</p>
         </div>
-        
         <div className="flex items-center gap-4">
           <div className="bg-soft p-1 rounded-xl flex items-center gap-1 border border-gray-100">
-            <button 
-              onClick={() => setView('grid')}
-              className={`p-2 rounded-lg transition-all ${view === 'grid' ? 'bg-white shadow-sm text-primary' : 'text-muted hover:text-navy'}`}
-            >
+            <button onClick={() => setView('grid')} className={`p-2 rounded-lg transition-all ${view === 'grid' ? 'bg-white shadow-sm text-primary' : 'text-muted hover:text-navy'}`}>
               <Grid className="w-5 h-5" />
             </button>
-            <button 
-              onClick={() => setView('list')}
-              className={`p-2 rounded-lg transition-all ${view === 'list' ? 'bg-white shadow-sm text-primary' : 'text-muted hover:text-navy'}`}
-            >
+            <button onClick={() => setView('list')} className={`p-2 rounded-lg transition-all ${view === 'list' ? 'bg-white shadow-sm text-primary' : 'text-muted hover:text-navy'}`}>
               <List className="w-5 h-5" />
             </button>
           </div>
-          <button 
-            onClick={() => {
-              setEditingBook(null);
-              setIsModalOpen(true);
-            }}
-            className="btn-navy flex items-center gap-2"
-          >
+          <button onClick={() => { setEditingBook(null); setIsModalOpen(true); }} className="btn-navy flex items-center gap-2">
             <Plus className="w-5 h-5 text-primary" />
             <span className="font-bold">Thêm Sách Mới</span>
           </button>
@@ -167,12 +136,12 @@ export default function BooksPage() {
       <div className="flex flex-col md:flex-row gap-4">
         <div className="flex-1 relative">
           <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-muted" />
-          <input 
-            type="text" 
+          <input
+            type="text"
             placeholder="Tìm kiếm theo tên sách hoặc tác giả..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full bg-soft rounded-2xl py-4 pl-12 pr-6 outline-none focus:ring-4 focus:ring-primary/5 border border-gray-100 transition-all font-medium"
+            className="w-full bg-soft rounded-2xl py-4 pl-12 pr-6 outline-none focus:ring-4 focus:ring-primary/5 border border-gray-100 font-medium"
           />
         </div>
         <button className="bg-white border border-gray-200 px-6 py-4 rounded-2xl font-bold flex items-center justify-center gap-2 hover:border-primary transition-all text-navy shadow-sm">
@@ -184,7 +153,7 @@ export default function BooksPage() {
       <AnimatePresence mode="popLayout">
         {loading ? (
           <div className="flex flex-col items-center justify-center h-96 space-y-4">
-            <div className="w-12 h-12 border-4 border-primary border-t-transparent rounded-full animate-spin"></div>
+            <div className="w-12 h-12 border-4 border-primary border-t-transparent rounded-full animate-spin" />
             <p className="text-sm font-bold text-muted animate-pulse">Đang tải kho sách...</p>
           </div>
         ) : filteredBooks.length === 0 ? (
@@ -196,42 +165,22 @@ export default function BooksPage() {
             <p className="text-muted font-medium mt-2">Hãy thử điều chỉnh từ khóa tìm kiếm hoặc thêm sách mới vào kho.</p>
           </div>
         ) : (
-          <motion.div 
-            layout
-            className={view === 'grid' 
-              ? "grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-8"
-              : "flex flex-col gap-4"
-            }
-          >
-            {filteredBooks.map((book) => (
+          <motion.div layout className={view === 'grid' ? "grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-8" : "flex flex-col gap-4"}>
+            {filteredBooks.map((book) =>
               view === 'grid' ? (
                 <div key={book.id} className="relative group">
                   <BookCard book={book} />
                   <div className="absolute top-4 right-4 opacity-0 group-hover:opacity-100 transition-all flex flex-col gap-2 translate-x-2 group-hover:translate-x-0">
-                    <button 
-                      onClick={() => {
-                        setEditingBook(book);
-                        setIsModalOpen(true);
-                      }}
-                      className="p-3 bg-white shadow-xl hover:bg-navy hover:text-white text-navy rounded-xl transition-all"
-                    >
+                    <button onClick={() => { setEditingBook(book); setIsModalOpen(true); }} className="p-3 bg-white shadow-xl hover:bg-navy hover:text-white text-navy rounded-xl transition-all">
                       <Edit3 className="w-5 h-5" />
                     </button>
-                    <button 
-                      onClick={() => handleDeleteBook(book.id!)}
-                      className="p-3 bg-white shadow-xl hover:bg-red-500 hover:text-white text-red-500 rounded-xl transition-all"
-                    >
+                    <button onClick={() => handleDeleteBook(book.id!)} className="p-3 bg-white shadow-xl hover:bg-red-500 hover:text-white text-red-500 rounded-xl transition-all">
                       <Trash2 className="w-5 h-5" />
                     </button>
                   </div>
                 </div>
               ) : (
-                <motion.div 
-                  key={book.id}
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  className="bg-white p-5 rounded-2xl flex items-center gap-6 group hover:shadow-xl transition-all border border-gray-100"
-                >
+                <motion.div key={book.id} initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="bg-white p-5 rounded-2xl flex items-center gap-6 group hover:shadow-xl transition-all border border-gray-100">
                   <div className="w-16 h-20 bg-soft rounded-xl overflow-hidden shrink-0 shadow-sm">
                     <img src={book.imageUrl || 'https://images.unsplash.com/photo-1543004218-ee14110497f9?w=100'} className="w-full h-full object-cover" />
                   </div>
@@ -243,43 +192,26 @@ export default function BooksPage() {
                       <span className="text-[10px] font-black uppercase text-navy">ID: #{book.id}</span>
                     </div>
                   </div>
-                  
                   <div className="text-right shrink-0 px-8">
                     <p className="text-[10px] text-muted mb-1 uppercase tracking-widest font-black">Kho lưu trữ</p>
                     <p className="font-black text-xl text-navy">{book.quantity} cuốn</p>
                   </div>
                   <div className="flex items-center gap-3">
-                    <button 
-                      onClick={() => {
-                        setEditingBook(book);
-                        setIsModalOpen(true);
-                      }}
-                      className="p-3 rounded-xl hover:bg-soft text-navy transition-colors border border-gray-50"
-                    >
+                    <button onClick={() => { setEditingBook(book); setIsModalOpen(true); }} className="p-3 rounded-xl hover:bg-soft text-navy transition-colors border border-gray-50">
                       <Edit3 className="w-5 h-5" />
                     </button>
-                    <button 
-                      onClick={() => handleDeleteBook(book.id!)}
-                      className="p-3 rounded-xl hover:bg-red-50 text-red-500 transition-colors border border-gray-50"
-                    >
+                    <button onClick={() => handleDeleteBook(book.id!)} className="p-3 rounded-xl hover:bg-red-50 text-red-500 transition-colors border border-gray-50">
                       <Trash2 className="w-5 h-5" />
                     </button>
                   </div>
                 </motion.div>
               )
-            ))}
+            )}
           </motion.div>
-        )}
+        ))}
       </AnimatePresence>
 
-      <BookModal 
-        isOpen={isModalOpen} 
-        onClose={() => setIsModalOpen(false)} 
-        onSave={handleSaveBook}
-        book={editingBook}
-      />
+      <BookModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} onSave={handleSaveBook} book={editingBook} />
     </div>
   );
 }
-
-
