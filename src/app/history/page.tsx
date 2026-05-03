@@ -1,3 +1,4 @@
+import { API_URL } from '@/lib/api';
 'use client';
 
 import React, { useState, useEffect } from 'react';
@@ -44,12 +45,12 @@ export default function HistoryPage() {
   const fetchHistory = async (userId: number) => {
     try {
       // First get reader info
-      const readersRes = await fetch('http://localhost:10000/api/Readers');
+      const readersRes = await fetch('${API_URL}/api/Readers');
       const readers = await readersRes.json();
       const reader = readers.find((r: any) => r.user?.id === userId || r.User?.Id === userId);
 
       if (reader) {
-        const borrowsRes = await fetch('http://localhost:10000/api/Borrows');
+        const borrowsRes = await fetch('${API_URL}/api/Borrows');
         const allBorrows = await borrowsRes.json();
         const readerId = reader.id || reader.Id;
         const userBorrows = allBorrows.filter((b: any) => (b.readerId || b.ReaderId) == readerId);
@@ -66,10 +67,10 @@ export default function HistoryPage() {
     if (!confirm('Bạn có chắc chắn muốn trả sách này không?')) return;
     
     try {
-      const res = await fetch(`http://localhost:10000/api/Borrows/${id}`);
+      const res = await fetch(`${API_URL}/api/Borrows/${id}`);
       const borrow = await res.json();
       
-      const response = await fetch(`http://localhost:10000/api/Borrows/${id}`, {
+      const response = await fetch(`${API_URL}/api/Borrows/${id}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ ...borrow, status: 1 })
@@ -215,3 +216,4 @@ export default function HistoryPage() {
     </div>
   );
 }
+

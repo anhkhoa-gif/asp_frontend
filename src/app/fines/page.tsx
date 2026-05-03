@@ -1,3 +1,4 @@
+import { API_URL } from '@/lib/api';
 'use client';
 
 import React, { useState, useEffect } from 'react';
@@ -31,7 +32,7 @@ export default function FinesPage() {
   const [searchQuery, setSearchQuery] = useState('');
 
   useEffect(() => {
-    fetch('http://localhost:10000/api/Fines')
+    fetch('${API_URL}/api/Fines')
       .then(res => res.json())
       .then(data => {
         setFines(data);
@@ -145,3 +146,4 @@ export default function FinesPage() {
     </div>
   );
 }
+

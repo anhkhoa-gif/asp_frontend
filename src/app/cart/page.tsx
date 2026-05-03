@@ -1,3 +1,4 @@
+import { API_URL } from '@/lib/api';
 'use client';
 
 import React, { useState, useEffect } from 'react';
@@ -73,7 +74,7 @@ export default function CartPage() {
 
     try {
       // 1. Get Reader ID or Auto-Create
-      const readersRes = await fetch('http://localhost:10000/api/Readers');
+      const readersRes = await fetch('${API_URL}/api/Readers');
       const readers = await readersRes.json();
       
       let reader = readers.find((r: any) => 
@@ -83,7 +84,7 @@ export default function CartPage() {
 
       if (!reader) {
         // Auto-create reader card if missing
-        const createReaderRes = await fetch('http://localhost:10000/api/Readers', {
+        const createReaderRes = await fetch('${API_URL}/api/Readers', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ userId: user.id || user.Id, maxBooks: 5 })
@@ -111,7 +112,7 @@ export default function CartPage() {
       };
 
       // 3. POST to API
-      const response = await fetch('http://localhost:10000/api/Borrows', {
+      const response = await fetch('${API_URL}/api/Borrows', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(borrowData)
@@ -306,3 +307,4 @@ export default function CartPage() {
     </div>
   );
 }
+

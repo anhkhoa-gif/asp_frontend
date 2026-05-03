@@ -1,3 +1,4 @@
+import { API_URL } from '@/lib/api';
 'use client';
 
 import React, { useState } from 'react';
@@ -19,7 +20,7 @@ export default function LoginPage() {
     setError('');
 
     try {
-      const response = await fetch('http://localhost:10000/api/Users/login', {
+      const response = await fetch('${API_URL}/api/Users/login', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ username, password })
@@ -154,3 +155,4 @@ export default function LoginPage() {
     </div>
   );
 }
+

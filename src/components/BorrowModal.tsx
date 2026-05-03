@@ -1,3 +1,4 @@
+import { API_URL } from '@/lib/api';
 'use client';
 
 import React, { useState } from 'react';
@@ -33,7 +34,7 @@ export function BorrowModal({ isOpen, onClose, onSuccess, bookTitle, bookId }: B
         setFormData(prev => ({ ...prev, borrowerName: user.fullName || user.FullName || '' }));
         
         // Fetch reader info for this user
-        fetch(`http://localhost:10000/api/Readers`)
+        fetch(`${API_URL}/api/Readers`)
           .then(res => res.json())
           .then(readers => {
             // Use loose equality == to handle string vs number from sessionStorage
@@ -66,7 +67,7 @@ export function BorrowModal({ isOpen, onClose, onSuccess, bookTitle, bookId }: B
         }
         const user = JSON.parse(storedUser);
 
-        const createReaderRes = await fetch('http://localhost:10000/api/Readers', {
+        const createReaderRes = await fetch('${API_URL}/api/Readers', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ userId: user.id || user.Id, maxBooks: 5 })
@@ -97,7 +98,7 @@ export function BorrowModal({ isOpen, onClose, onSuccess, bookTitle, bookId }: B
         }))
       };
 
-      const response = await fetch('http://localhost:10000/api/Borrows', {
+      const response = await fetch('${API_URL}/api/Borrows', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(borrowData)
@@ -246,3 +247,4 @@ export function BorrowModal({ isOpen, onClose, onSuccess, bookTitle, bookId }: B
     </AnimatePresence>
   );
 }
+

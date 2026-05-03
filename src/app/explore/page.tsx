@@ -1,3 +1,4 @@
+import { API_URL } from '@/lib/api';
 'use client';
 
 import React, { useState, useEffect } from 'react';
@@ -42,7 +43,7 @@ export default function ExplorePage() {
   const [searchQuery, setSearchQuery] = useState('');
 
   useEffect(() => {
-    fetch('http://localhost:10000/api/Books')
+    fetch('${API_URL}/api/Books')
       .then(res => res.json())
       .then(data => {
         setBooks(data);
@@ -180,3 +181,4 @@ export default function ExplorePage() {
     </div>
   );
 }
+

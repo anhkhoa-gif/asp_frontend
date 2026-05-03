@@ -1,3 +1,4 @@
+import { API_URL } from '@/lib/api';
 'use client';
 
 import React, { useState, useEffect } from 'react';
@@ -33,7 +34,7 @@ export default function TransactionsPage() {
   const [searchQuery, setSearchQuery] = useState('');
 
   useEffect(() => {
-    fetch('http://localhost:10000/api/Borrows')
+    fetch('${API_URL}/api/Borrows')
       .then(res => res.json())
       .then(data => {
         setBorrows(data);
@@ -47,19 +48,19 @@ export default function TransactionsPage() {
 
   const handleReturnBook = async (id: number) => {
     try {
-      const res = await fetch(`http://localhost:10000/api/Borrows/${id}`);
+      const res = await fetch(`${API_URL}/api/Borrows/${id}`);
       const borrow = await res.json();
       
       const updatedBorrow = { ...borrow, status: 1 };
       
-      const response = await fetch(`http://localhost:10000/api/Borrows/${id}`, {
+      const response = await fetch(`${API_URL}/api/Borrows/${id}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(updatedBorrow)
       });
 
       if (response.ok) {
-        fetch('http://localhost:10000/api/Borrows')
+        fetch('${API_URL}/api/Borrows')
           .then(res => res.json())
           .then(data => setBorrows(data));
       }
@@ -193,3 +194,4 @@ export default function TransactionsPage() {
     </div>
   );
 }
+

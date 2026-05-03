@@ -1,3 +1,4 @@
+import { API_URL } from '@/lib/api';
 'use client';
 
 import React, { useState, useEffect } from 'react';
@@ -37,7 +38,7 @@ export default function BooksPage() {
 
   const fetchBooks = () => {
     setLoading(true);
-    fetch('http://localhost:10000/api/Books')
+    fetch('${API_URL}/api/Books')
       .then(res => res.json())
       .then(data => {
         setBooks(data);
@@ -75,8 +76,8 @@ export default function BooksPage() {
 
   const handleSaveBook = async (bookData: any) => {
     const url = bookData.id 
-      ? `http://localhost:10000/api/Books/${bookData.id}` 
-      : 'http://localhost:10000/api/Books';
+      ? `${API_URL}/api/Books/${bookData.id}` 
+      : '${API_URL}/api/Books';
     const method = bookData.id ? 'PUT' : 'POST';
 
     try {
@@ -99,7 +100,7 @@ export default function BooksPage() {
     if (!confirm('Bạn có chắc chắn muốn xóa cuốn sách này không?')) return;
 
     try {
-      const response = await fetch(`http://localhost:10000/api/Books/${id}`, {
+      const response = await fetch(`${API_URL}/api/Books/${id}`, {
         method: 'DELETE'
       });
 
@@ -280,3 +281,4 @@ export default function BooksPage() {
     </div>
   );
 }
+

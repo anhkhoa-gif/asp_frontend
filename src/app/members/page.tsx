@@ -1,3 +1,4 @@
+import { API_URL } from '@/lib/api';
 'use client';
 
 import React, { useState, useEffect } from 'react';
@@ -42,8 +43,8 @@ export default function MembersPage() {
     setLoading(true);
     try {
       const [readersRes, usersRes] = await Promise.all([
-        fetch('http://localhost:10000/api/Readers'),
-        fetch('http://localhost:10000/api/Users')
+        fetch('${API_URL}/api/Readers'),
+        fetch('${API_URL}/api/Users')
       ]);
 
       const readersData: Reader[] = await readersRes.json();
@@ -77,8 +78,8 @@ export default function MembersPage() {
     try {
       if (editingMember && editingMember.id > 0) {
         // Update existing reader
-        const userUrl = `http://localhost:10000/api/Users/${editingMember.user.id}`;
-        const readerUrl = `http://localhost:10000/api/Readers/${editingMember.id}`;
+        const userUrl = `${API_URL}/api/Users/${editingMember.user.id}`;
+        const readerUrl = `${API_URL}/api/Readers/${editingMember.id}`;
 
         const userRes = await fetch(userUrl, {
           method: 'PUT',
@@ -111,7 +112,7 @@ export default function MembersPage() {
         let userId = formData.userId;
         
         if (!userId) {
-          const userRes = await fetch('http://localhost:10000/api/Users', {
+          const userRes = await fetch('${API_URL}/api/Users', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
@@ -127,7 +128,7 @@ export default function MembersPage() {
           userId = newUser.id || newUser.Id;
         }
 
-        const readerRes = await fetch('http://localhost:10000/api/Readers', {
+        const readerRes = await fetch('${API_URL}/api/Readers', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
@@ -173,7 +174,7 @@ export default function MembersPage() {
 
     for (const user of newUsers) {
       try {
-        const res = await fetch('http://localhost:10000/api/Readers', {
+        const res = await fetch('${API_URL}/api/Readers', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
@@ -196,7 +197,7 @@ export default function MembersPage() {
   const handleDeleteMember = async (id: number) => {
     if (!confirm('Bạn có chắc chắn muốn xóa khách hàng này không?')) return;
     try {
-      await fetch(`http://localhost:10000/api/Readers/${id}`, { method: 'DELETE' });
+      await fetch(`${API_URL}/api/Readers/${id}`, { method: 'DELETE' });
       fetchData();
     } catch (err) {
       console.error('Error deleting member:', err);
@@ -416,3 +417,4 @@ export default function MembersPage() {
     </div>
   );
 }
+

@@ -1,3 +1,4 @@
+import { API_URL } from '@/lib/api';
 'use client';
 
 import React, { useState } from 'react';
@@ -29,7 +30,7 @@ export default function RegisterPage() {
     setError('');
 
     try {
-      const response = await fetch('http://localhost:10000/api/Users', {
+      const response = await fetch('${API_URL}/api/Users', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -197,3 +198,4 @@ export default function RegisterPage() {
     </div>
   );
 }
+

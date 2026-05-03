@@ -1,3 +1,4 @@
+import { API_URL } from '@/lib/api';
 'use client';
 
 import React, { useState, useEffect } from 'react';
@@ -33,7 +34,7 @@ export default function ProfilePage() {
 
   useEffect(() => {
     // For now, let's fetch the first user (Reader) as our "current user"
-    fetch('http://localhost:10000/api/Users/1')
+    fetch('${API_URL}/api/Users/1')
       .then(res => res.json())
       .then(data => {
         setProfile(data);
@@ -202,3 +203,4 @@ export default function ProfilePage() {
     </div>
   );
 }
+
