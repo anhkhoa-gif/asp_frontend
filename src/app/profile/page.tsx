@@ -33,7 +33,7 @@ export default function ProfilePage() {
 
   useEffect(() => {
     // For now, let's fetch the first user (Reader) as our "current user"
-    fetch('http://localhost:5000/api/Users/1')
+    fetch('http://localhost:10000/api/Users/1')
       .then(res => res.json())
       .then(data => {
         setProfile(data);

@@ -29,10 +29,10 @@ const statusColors = {
 };
 
 const statusLabels = {
-  [BookStatus.Available]: 'Available',
-  [BookStatus.Borrowed]: 'Borrowed',
-  [BookStatus.Reserved]: 'Reserved',
-  [BookStatus.Lost]: 'Lost',
+  [BookStatus.Available]: 'Sẵn có',
+  [BookStatus.Borrowed]: 'Đã mượn',
+  [BookStatus.Reserved]: 'Đã đặt',
+  [BookStatus.Lost]: 'Bị mất',
 };
 
 export function BookCard({ book }: { book: Book }) {
@@ -60,7 +60,7 @@ export function BookCard({ book }: { book: Book }) {
         )}
         <div className="absolute top-3 left-3">
           <span className="bg-black/60 backdrop-blur-md text-white text-[10px] font-black uppercase px-2 py-1 rounded-lg border border-white/10">
-            {book.category || 'General'}
+            {book.category || 'Chung'}
           </span>
         </div>
       </div>
@@ -80,7 +80,7 @@ export function BookCard({ book }: { book: Book }) {
           {statusLabels[book.status]}
         </span>
         <span className="text-sm font-medium text-secondary">
-          Qty: <span className="text-foreground">{book.quantity}</span>
+          SL: <span className="text-foreground">{book.quantity}</span>
         </span>
       </div>
     </motion.div>
