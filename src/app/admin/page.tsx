@@ -11,13 +11,15 @@ import {
   AlertCircle
 } from 'lucide-react';
 import { motion } from 'framer-motion';
+import { API_URL } from '@/lib/api';
 
 export default function AdminDashboard() {
   const [stats, setStats] = useState({
     totalBooks: 0,
     totalMembers: 0,
     totalBorrows: 0,
-    overdueBooks: 0
+    overdueBooks: 0,
+    pendingMembers: 0
   });
   const [recentBorrows, setRecentBorrows] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
@@ -26,10 +28,10 @@ export default function AdminDashboard() {
     const fetchData = async () => {
       try {
         const [booksRes, usersRes, borrowsRes, readersRes] = await Promise.all([
-          fetch('http://localhost:10000/api/Books'),
-          fetch('http://localhost:10000/api/Users'),
-          fetch('http://localhost:10000/api/Borrows'),
-          fetch('http://localhost:10000/api/Readers')
+          fetch(`${API_URL}/api/Books`),
+          fetch(`${API_URL}/api/Users`),
+          fetch(`${API_URL}/api/Borrows`),
+          fetch(`${API_URL}/api/Readers`)
         ]);
 
         const [books, users, borrows, readers] = await Promise.all([

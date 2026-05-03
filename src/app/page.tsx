@@ -61,7 +61,7 @@ export default function Dashboard() {
 
   const fetchBooks = () => {
     setLoading(true);
-    fetch('http://localhost:10000/api/Books')
+    fetch(`${API_URL}/api/Books`)
       .then(res => res.json())
       .then(data => {
         setBooks(data);
