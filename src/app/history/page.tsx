@@ -1,5 +1,5 @@
-import { API_URL } from '@/lib/api';
 'use client';
+import { API_URL } from '@/lib/api';
 
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
@@ -216,4 +216,5 @@ export default function HistoryPage() {
     </div>
   );
 }
+
 

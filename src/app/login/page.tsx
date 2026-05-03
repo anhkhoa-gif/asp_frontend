@@ -1,5 +1,5 @@
-import { API_URL } from '@/lib/api';
 'use client';
+import { API_URL } from '@/lib/api';
 
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
@@ -155,4 +155,5 @@ export default function LoginPage() {
     </div>
   );
 }
+
 
