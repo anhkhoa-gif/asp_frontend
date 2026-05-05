@@ -167,7 +167,7 @@ export default function BooksPage() {
         ) : (
           <motion.div layout className={view === 'grid' ? "grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-8" : "flex flex-col gap-4"}>
             {filteredBooks.map((book) => (
-              (view === 'grid' ? (
+              view === 'grid' ? (
                 <div key={book.id} className="relative group">
                   <BookCard book={book} />
                   <div className="absolute top-4 right-4 opacity-0 group-hover:opacity-100 transition-all flex flex-col gap-2 translate-x-2 group-hover:translate-x-0">
