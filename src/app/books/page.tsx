@@ -496,7 +496,7 @@ export default function BooksPage() {
               )
             ))}
           </motion.div>
-        ))}
+        )}
       </AnimatePresence>
 
       <BookModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} onSave={handleSaveBook} book={editingBook} />
